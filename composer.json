@@ -1,0 +1,49 @@
+{
+    "name": "omnihub/github",
+    "type": "library",
+    "description": "Omnihub's GitHub provider: a static hub's packages read from GitHub - each repository's releases, their .tgz assets (npm pack's tarball), their package.json and hashes.",
+    "keywords": [
+        "upm",
+        "unity",
+        "github",
+        "releases",
+        "omnihub"
+    ],
+    "homepage": "https://github.com/glitchr-omnisense/omnihub-github",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marco Meyer",
+            "email": "marco.meyer@glitchr.io"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "omnisense/omnihub": "1.x-dev",
+        "symfony/http-client": "^6.4|^7.0|^8.0",
+        "symfony/http-client-contracts": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Omnihub\\GitHub\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Omnihub\\GitHub\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
