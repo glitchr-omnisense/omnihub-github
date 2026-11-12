@@ -1,0 +1,66 @@
+{
+    "$schema": "https://github.com/glitchr-omnisense/contracts/blob/1.x/resources/usage-policy.schema.json",
+    "provider": "github",
+    "rateLimits": [
+        {
+            "max": 60,
+            "window": "hour",
+            "scope": "client-ip",
+            "operations": [],
+            "note": "Without a token: 60 requests an hour per address. A 304 answered to If-None-Match does not count with a token."
+        }
+    ],
+    "plans": {
+        "default": "anonymous",
+        "plans": {
+            "anonymous": {
+                "rateLimits": [
+                    {"max": 60, "window": "hour", "scope": "client-ip", "operations": []}
+                ],
+                "source": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+                "verifiedAt": "2026-11-12",
+                "note": "Figures as GitHub's documentation gives them, not re-read online for this file."
+            },
+            "token": {
+                "rateLimits": [
+                    {"max": 5000, "window": "hour", "scope": "key", "operations": []}
+                ],
+                "source": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+                "verifiedAt": "2026-11-12",
+                "note": "A personal token: 5,000 an hour. A GitHub Action's GITHUB_TOKEN: 1,000 an hour per repository."
+            }
+        }
+    },
+    "rights": {
+        "commercial": "unknown",
+        "openSourceRequired": null,
+        "caching": {
+            "permission": "unknown",
+            "maxTtl": null
+        },
+        "storage": "unknown",
+        "redistribution": "unknown",
+        "attribution": {
+            "required": false,
+            "text": null,
+            "url": null,
+            "where": []
+        },
+        "licence": null
+    },
+    "requirements": {
+        "key": false,
+        "userAgent": {
+            "required": true,
+            "pattern": "/\\S+/"
+        }
+    },
+    "provenance": {
+        "terms": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+        "policy": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+        "verifiedAt": null,
+        "declaredBy": "maintainer",
+        "contact": null,
+        "notes": "Only public repositories are read (their list, package.json, tags, releases); a token only lifts the limits. Every request carries the last ETag; nothing is sent past X-RateLimit-Remaining 0 or a Retry-After (Omnihub\\GitHub\\Api). Rights the terms were not read for are unknown."
+    }
+}
