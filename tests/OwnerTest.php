@@ -28,12 +28,12 @@ class OwnerTest extends TestCase
             $seen[] = $path;
 
             return match (true) {
-                str_starts_with($path, '/users/acme/repos?') && !str_contains($path, 'page=2') => new MockResponse(json_encode(\array_slice($repositories, 0, 3)), ['response_headers' => ['link' => '<https://api.github.com/users/acme/repos?type=owner&per_page=100&page=2>; rel="next"']]),
-                str_contains($path, 'page=2') => new MockResponse(json_encode(\array_slice($repositories, 3))),
-                '/repos/acme/unity-tool/contents/package.json' === $path => new MockResponse(json_encode(['name' => 'com.acme.tool', 'displayName' => 'Acme Tool', 'version' => '1.2.0'])),
-                '/repos/acme/Unity-Paint/contents/package.json' === $path => new MockResponse(json_encode(['name' => 'com.acme.paint'])),
+                str_starts_with($path, '/users/acme/repos?') && !str_contains($path, 'page=2') => new MockResponse((string) json_encode(\array_slice($repositories, 0, 3)), ['response_headers' => ['link' => '<https://api.github.com/users/acme/repos?type=owner&per_page=100&page=2>; rel="next"']]),
+                str_contains($path, 'page=2') => new MockResponse((string) json_encode(\array_slice($repositories, 3))),
+                '/repos/acme/unity-tool/contents/package.json' === $path => new MockResponse((string) json_encode(['name' => 'com.acme.tool', 'displayName' => 'Acme Tool', 'version' => '1.2.0'])),
+                '/repos/acme/Unity-Paint/contents/package.json' === $path => new MockResponse((string) json_encode(['name' => 'com.acme.paint'])),
                 '/repos/acme/unity-docs/contents/package.json' === $path => new MockResponse('{"message":"Not Found"}', ['http_code' => 404]),
-                str_starts_with($path, '/repos/acme/unity-tool/tags') => new MockResponse(json_encode([['name' => 'v1.10.0-beta'], ['name' => 'v1.2.0'], ['name' => 'v1.10.0'], ['name' => 'nightly']])),
+                str_starts_with($path, '/repos/acme/unity-tool/tags') => new MockResponse((string) json_encode([['name' => 'v1.10.0-beta'], ['name' => 'v1.2.0'], ['name' => 'v1.10.0'], ['name' => 'nightly']])),
                 str_starts_with($path, '/repos/acme/Unity-Paint/tags') => new MockResponse('[]'),
                 default => new MockResponse('', ['http_code' => 500]),
             };

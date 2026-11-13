@@ -1,6 +1,12 @@
+# PHPStan at the highest level, as the family's harness runs it (docker compose run --rm omnihub
+# phpstan, in omnisense/omnihub's docker/). The baseline is empty: anything PHPStan reports fails.
+includes:
+    - phpstan-baseline.neon
+
 parameters:
-    level: 8
+    level: max
     paths:
-        - src
-    ignoreErrors:
-        - identifier: missingType.iterableValue
+        - .
+    excludePaths:
+        - vendor (?)
+        - docker (?)

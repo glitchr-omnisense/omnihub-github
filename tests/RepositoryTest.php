@@ -14,7 +14,7 @@ class RepositoryTest extends TestCase
 {
     public function testItsReleasesBecomeVersions(): void
     {
-        $tgz = fn (string $v) => Tarball::create(['package.json' => json_encode(['name' => 'com.studio.one', 'version' => $v, 'unity' => '2021.3'])]);
+        $tgz = fn (string $v) => Tarball::create(['package.json' => (string) json_encode(['name' => 'com.studio.one', 'version' => $v, 'unity' => '2021.3'])]);
         $asset = fn (string $v) => 'https://github.com/studio/one/releases/download/v'.$v.'/com.studio.one-'.$v.'.tgz';
         $releases = [
             ['tag_name' => 'v1.1.0', 'draft' => false, 'published_at' => '2026-10-02T10:00:00Z', 'body' => 'Faster.', 'assets' => [['name' => 'com.studio.one-1.1.0.tgz', 'browser_download_url' => $asset('1.1.0')], ['name' => 'notes.txt', 'browser_download_url' => 'https://x/notes.txt']]],
@@ -25,9 +25,9 @@ class RepositoryTest extends TestCase
         $client = new MockHttpClient(function (string $method, string $url, array $options) use ($releases, $tgz, $asset, &$seen) {
             $seen[] = $url;
             if (str_starts_with($url, 'https://api.github.com/repos/studio/one/releases')) {
-                self::assertContains('Authorization: Bearer secret', $options['headers']);
+                self::assertContains('Authorization: Bearer secret', \is_array($options['headers'] ?? null) ? $options['headers'] : []);
 
-                return new MockResponse(json_encode($releases), ['response_headers' => ['content-type' => 'application/json']]);
+                return new MockResponse((string) json_encode($releases), ['response_headers' => ['content-type' => 'application/json']]);
             }
             foreach (['1.0.0', '1.1.0'] as $v) {
                 if ($url === $asset($v)) {
@@ -49,8 +49,11 @@ class RepositoryTest extends TestCase
         self::assertNotContains('https://x/notes.txt', $seen, 'only the tarballs downloaded');
 
         $document = Registry::document($package);
-        self::assertSame($asset('1.1.0'), $document['versions']['1.1.0']['dist']['tarball'], 'the tarball stays on GitHub');
-        self::assertSame('2021.3', $document['versions']['1.1.0']['unity']);
+        $versions = $document['versions'] ?? null;
+        self::assertIsArray($versions);
+        self::assertIsArray($versions['1.1.0'] ?? null);
+        self::assertSame($asset('1.1.0'), \is_array($versions['1.1.0']['dist'] ?? null) ? ($versions['1.1.0']['dist']['tarball'] ?? null) : null, 'the tarball stays on GitHub');
+        self::assertSame('2021.3', $versions['1.1.0']['unity'] ?? null);
     }
 
     public function testARepositoryIsOwnerSlashName(): void

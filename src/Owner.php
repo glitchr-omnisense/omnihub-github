@@ -28,11 +28,11 @@ final class Owner
         $repositories = $this->api->list('/users/'.rawurlencode($owner).'/repos?type=owner&sort=full_name&per_page=100');
         $resolved = [];
         foreach ($repositories as $repository) {
-            $name = (string) ($repository['name'] ?? '');
+            $name = \is_string($repository['name'] ?? null) ? $repository['name'] : '';
             if (!self::isPublic($repository) || !$source->matches($name)) {
                 continue;
             }
-            $login = (string) ($repository['owner']['login'] ?? $owner);
+            $login = \is_array($repository['owner'] ?? null) && \is_string($repository['owner']['login'] ?? null) ? $repository['owner']['login'] : $owner;
             $package = $this->package($login, $name);
             if (null === $package) {
                 continue;
@@ -51,6 +51,7 @@ final class Owner
         return array_values($resolved);
     }
 
+    /** @param array<mixed> $repository */
     private static function isPublic(array $repository): bool
     {
         return false === ($repository['private'] ?? null) && 'public' === ($repository['visibility'] ?? 'public');
@@ -76,7 +77,7 @@ final class Owner
     {
         $newest = [null, null];
         foreach ($this->api->list('/repos/'.rawurlencode($owner).'/'.rawurlencode($repository).'/tags?per_page=100') as $tag) {
-            $name = (string) ($tag['name'] ?? '');
+            $name = \is_string($tag['name'] ?? null) ? $tag['name'] : '';
             if (!preg_match('/^v?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$/', $name, $match)) {
                 continue;
             }
