@@ -6,11 +6,28 @@ Each published release (not a draft) whose assets hold a `.tgz` - what
 `package.json` read, its sha1 and sha512 taken, the release's notes as its
 changelog. Unity installs the asset itself: the tarball stays on GitHub.
 
+## Installation and a first call
+
+```sh
+composer require omnihub/github
+```
+
+It requires omnisense/omnihub and symfony/http-client. No account is needed
+for public repositories: anonymous calls are allowed (60 requests an hour by
+GitHub's rules); a token (`GITHUB_TOKEN`, a GitHub Action's own) raises the
+limit. Only GitHub's REST API is read, never a page of github.com.
+
 ```php
+require __DIR__.'/vendor/autoload.php';
+
 use Omnihub\GitHub\Repository;
+use Omnihub\Upm\Registry;
 use Symfony\Component\HttpClient\HttpClient;
 
 $packages = (new Repository('mystudio/tool', HttpClient::create(), getenv('GITHUB_TOKEN') ?: null))->packages();
+foreach ($packages as $package) {
+    echo Registry::json(Registry::document($package)), "\n";   // what Unity reads at GET /<name>
+}
 ```
 
 In `hub.yaml` (`vendor/bin/omnihub build`): `- github: mystudio/tool`, and

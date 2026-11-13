@@ -1,8 +1,22 @@
 # Changelog
 
-## Unreleased
+## [Unreleased]
 
-- On omnisense/contracts (`^1.0@dev`) through omnihub's HTTP kit: `Api`'s
+## [1.0.0] - 2026-11-13
+
+The first stable version. It requires `omnisense/contracts` `^1.0` and
+`omnisense/omnihub` `^1.0` with no stability flag, so
+`composer require omnihub/github` installs it in a project with Composer's
+default minimum-stability; the 1.x series follows semantic versioning. A tag
+`vX.Y.Z` is released by `.github/workflows/release.yml` once the package's CI
+passes on it.
+
+- `.github/workflows/ci.yml` (glitchr-studio/ci's php-package workflow) and
+  `release.yml`; the README opens on the install line and a first call that
+  needs no account (a public repository, anonymously).
+
+
+- On omnisense/contracts (`^1.0`) through omnihub's HTTP kit: `Api`'s
   requests and the tarballs' downloads are sent once (`Http\NoRetry`), with a
   timeout and the User-Agent `omnihub (+https://github.com/glitchr-omnisense/omnihub)`
   (it was `omnihub`); a network failure is an `UnreachableException` without
@@ -35,7 +49,5 @@
   nothing sent past `X-RateLimit-Remaining: 0` or a `Retry-After`
   (`RateLimited`).
 - `policy.json`: the API's limits as the omnisense family declares them.
-
-## 1.0.0
 
 - A hub's packages read from GitHub releases and their `.tgz` assets.

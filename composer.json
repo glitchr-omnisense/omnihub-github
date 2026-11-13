@@ -19,8 +19,8 @@
     ],
     "require": {
         "php": ">=8.2",
-        "omnisense/contracts": "^1.0@dev",
-        "omnisense/omnihub": "1.x-dev",
+        "omnisense/contracts": "^1.0",
+        "omnisense/omnihub": "^1.0",
         "symfony/http-client": "^6.4|^7.0|^8.0",
         "symfony/http-client-contracts": "^3.0"
     },
@@ -48,7 +48,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
